@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" style="height:100%">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+  <script src="https://cdn.ckeditor.com/4.11.4/standard/ckeditor.js"></script>
+  <title>MiniWP</title>
+</head>
+<body>
+    <div class="container-fluid">
+      <div class="row">
+        <div id="sidebar" class="col-sm-2 px-1 bg-dark">
+          <div class="py-2 sticky-top flex-grow-1">
+            <div class="nav flex-sm-column">
+                <div>
+                  <a href="" id="logo" class="nav-link d-none d-sm-inline">Mini WP <i class="far fa-file-alt"></i></a>
+                </div>
+                <span class="border-top mt-3 mb-3"></span>
+                <div id="profile" class="container" style="text-align:center">
+                  <img id="avatar" class="img-responsive rounded mx-auto d-block" src="https://ih0.redbubble.net/image.480719758.4444/flat,550x550,075,f.u2.jpg" alt="Avatar">
+                  <p>Sakata Gintoki</p>
+                  <a href=""><p>Edit Profile</p></a>
+                </div>
+                <span class="border-bottom mt-3 mb-3"></span>
+                <div class="container">
+                  <a id="new-article" href="" class="nav-link">New Article</a>
+                  <a href="" class="nav-link">Draft</a>
+                  <a href="" class="nav-link">Menu 1</a>
+                  <a href="" class="nav-link">Menu 2</a>
+                  <a href="" class="nav-link">Menu 3</a>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col" id="main">
+
+          <div class="py-2 sticky-top flex-grow-1">
+            <div class="text-right offset-8">
+                <form>
+                  <div id="search">
+                    <input type="text" class="form-control" placeholder="Search">
+                    <div class="search-btn">
+                      <button class="btn btn-default" type="submit" style="visibility:hidden">
+                      </button>
+                    </div>
+                  </div>
+                </form>
+            </div>
+          </div>
+
+          <div class="row">
+
+            <div id="content" class="container">
+  
+              <div id="article-container" class="container">
+              </div>
+    
+              <div id="article-form" class="container">
+                <h2>New Article</h2>
+                <form action="">
+                  <div class="row">
+                    <div id="article-input" class="col-4">
+                      <input class="form-control input-sm mb-3" id="inputsm" type="text" placeholder="title">
+                      <input class="form-control input-sm mb-3" id="inputsm" type="text" placeholder="tag">
+                      <input class="form-control input-sm mb-3" id="inputsm" type="text" placeholder="category">
+                      <input class="form-control input-sm mb-3" id="inputsm" type="text" placeholder="description">
+                      <p>Type your story here..</p>
+                    </div>
+  
+                    <div id="article-input" class="col-4">
+                        <div class="mapouter"><div class="gmap_canvas"><iframe width="300" height="200" id="gmap_canvas" src="https://maps.google.com/maps?q=hacktiv8&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><a href="https://www.emojilib.com">emojilib.com</a></div><style>.mapouter{position:relative;text-align:right;height:200px;width:300px;}.gmap_canvas {overflow:hidden;background:none!important;height:200px;width:300px;}</style></div>
+                    </div>
+  
+                  </div>
+                  <textarea id="textarea" name="ckeditor"></textarea>
+                  <button type="button" class="btn btn-light">Submit</button>
+                </form>
+              </div>
+              
+            </div>
+            
+            <div id="footer" class=" py-2 sticky-top flex-grow-1 bg-dark" style="text-align:center">
+              <h6>miniWP</h6>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  <script>CKEDITOR.replace( 'ckeditor' )</script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="https://cdn.ckeditor.com/4.11.4/standard/ckeditor.js"></script>
+  <script src="./javascript/index.js"></script>
+</body>
+</html>

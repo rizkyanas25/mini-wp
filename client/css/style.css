@@ -1,0 +1,55 @@
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+body {
+  background-color: #1F2226;
+  color: #F0F0F2
+}
+
+#logo {
+ font-size: 5.5vh
+}
+
+#avatar {
+  border-radius: 50%;
+  width: 60%;
+  height: 60%;
+}
+
+#sidebar a {
+  color: #F0F0F2;
+  text-decoration: none;
+}
+
+.nav-link {
+  font-size: 3vh
+}
+
+#sidebar a:hover {
+  color: rgb(255, 255, 255);
+}
+
+#main {
+  font-size: 28px; /* Increased text to enable scrolling */
+  padding: 0px 10px;
+}
+
+p {
+  font-size: 15px
+}
+
+#articles {
+  display: flex
+}
+
+.row {
+  margin-left: -9px;
+  margin-right: -12px
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
