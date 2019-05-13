@@ -4,46 +4,103 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="./css/style.css">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-  <script src="https://cdn.ckeditor.com/4.11.4/standard/ckeditor.js"></script>
-  <title>MiniWP</title>
+  <link rel="stylesheet" href="./css/vueWysiwyg.css">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Condensed" rel="stylesheet">
+  <link rel="shortcut icon" href="https://image.flaticon.com/icons/png/512/32/32329.png">
+  <title>miniWP</title>
 </head>
-<body>
-    <div class="container-fluid">
-      <div class="row">
+<body style="height:100%; margin-left:10px; margin-right: 15px" >
+  <div id="app">
+
+    <div class="fluid">
+
+    <!-- <login-form/> -->
+
+    <div v-if="!isLogin && !isRegister" class="container d-flex justify-content-center">
+    
+      <div class="col-md-5 login-form-1 bg-dark" style="margin-top:100px">
+          <h2>miniWP</h2>
+              <div class="form-group">
+                  <input v-model="email" type="text" class="form-control" placeholder="Your Email *" value="" required/>
+              </div>
+              <div class="form-group">
+                  <input v-model="password" type="password" class="form-control" placeholder="Your Password *" value="" required/>
+              </div>
+              <div class="form-group d-flex justify-content-center">
+                  <input v-on:click="login" type="submit" class="btnSubmit" value="Login" />
+              </div>
+              <div class="form-group" style="text-align:center">
+                  <label>Not registered yet ?</label>
+                  <br>
+                  <a href="" style="color:white" v-on:click.prevent="isRegister = true"><h6>Register</h6></a>
+              </div>
+      </div>
+    </div>
+      <!-- <register-form/> -->
+
+      <div v-if="isRegister" class="container d-flex justify-content-center">
+      
+        <div class="col-md-5 login-form-1 bg-dark" style="margin-top:100px">
+            <h2>miniWP</h2>
+                <div class="form-group">
+                    <input v-model="newUser.name" type="text" class="form-control" placeholder="Your Name *" value="" />
+                </div>
+                <div class="form-group">
+                    <input v-model="newUser.profilePic" type="text" class="form-control" placeholder="Your Profile Picture Url *" value="" />
+                </div>
+                <div class="form-group">
+                    <input v-model="newUser.email" type="text" class="form-control" placeholder="Your Email *" value="" />
+                </div>
+                <div class="form-group">
+                    <input v-model="newUser.password" type="password" class="form-control" placeholder="Your Password *" value="" />
+                </div>
+                <div class="form-group d-flex justify-content-center">
+                    <input v-on:click.prevent="register" type="submit" class="btnSubmit" value="Register" />
+                </div>
+                <div class="form-group d-flex justify-content-center">
+                    <a href="" style="color:white" v-on:click.prevent="isRegister= false;">Back to login screen</a>
+                </div>
+        </div>
+      </div>
+
+      <!-- sidebar -->
+
+      <div v-show="isLogin" class="row">
         <div id="sidebar" class="col-sm-2 px-1 bg-dark">
           <div class="py-2 sticky-top flex-grow-1">
             <div class="nav flex-sm-column">
-                <div>
-                  <a href="" id="logo" class="nav-link d-none d-sm-inline">Mini WP <i class="far fa-file-alt"></i></a>
+                <div class="d-flex justify-content-center ">
+                  <a href="" id="logo" class="nav-link d-none d-sm-inline" v-on:click.prevent="articlesSeen = true; articleFormSeen = false; articleDetail = false;">Mini WP <i class="far fa-file-alt"></i></a>
                 </div>
                 <span class="border-top mt-3 mb-3"></span>
                 <div id="profile" class="container" style="text-align:center">
-                  <img id="avatar" class="img-responsive rounded mx-auto d-block" src="https://ih0.redbubble.net/image.480719758.4444/flat,550x550,075,f.u2.jpg" alt="Avatar">
-                  <p>Sakata Gintoki</p>
-                  <a href=""><p>Edit Profile</p></a>
+                  <img id="avatar" class="img-responsive rounded mx-auto d-block mb-2" v-bind:src="profilePic" alt="Avatar">
+                  <h6>{{name}}</h6>
+                  <p>{{email}}</p>
+                  <button v-on:click="logout" class="btn btn-dark" >logout</button>
                 </div>
                 <span class="border-bottom mt-3 mb-3"></span>
-                <div class="container">
-                  <a id="new-article" href="" class="nav-link">New Article</a>
-                  <a href="" class="nav-link">Draft</a>
-                  <a href="" class="nav-link">Menu 1</a>
-                  <a href="" class="nav-link">Menu 2</a>
-                  <a href="" class="nav-link">Menu 3</a>
+                <div class="container" style="text-align:center">
+                  <button class="btn btn-dark btn-lg mb-1" v-on:click.prevent="clearForm; articlesSeen = false; articleFormSeen = true; articleDetail= false; editFormSeen=false"><i class="fas fa-plus-square"></i> > New Article</button>
+                  <button class="btn btn-dark btn-lg" v-on:click.prevent="articlesSeen = true; articleFormSeen = false"><i class="fab fa-readme"></i> > All Articles</button>
                 </div>
             </div>
           </div>
         </div>
 
-        <div class="col" id="main">
+        <!-- main menu / content -->
 
-          <div class="py-2 sticky-top flex-grow-1">
+
+        <div class="col" id="main" style="width:100%">
+
+          <div class="py-2 sticky-top flex-grow-1" v-if="articlesSeen">
             <div class="text-right offset-8">
                 <form>
                   <div id="search">
-                    <input type="text" class="form-control" placeholder="Search">
+                    <input v-model="search" type="text" class="form-control" placeholder="Search by title...">
                     <div class="search-btn">
                       <button class="btn btn-default" type="submit" style="visibility:hidden">
                       </button>
@@ -53,51 +110,135 @@
             </div>
           </div>
 
+
+          <!-- list of article -->
+
           <div class="row">
 
             <div id="content" class="container">
-  
-              <div id="article-container" class="container">
+      
+              <div v-show="articlesSeen" id="article-container" class="container row" style="margin-top:-25px; height: 100%;">
+                <div class="row d-flex justify-content-center" style="width:100%">
+                  <h1>All Articles</h1>
+                </div>
+                <div id="articles" class="row d-flex justify-content-center" style="width:100%">
+                  <div class="card bg-dark col-4 m-3" style="max-width: 18rem;" v-for="article in filteredList" :key="article._id">
+                    <a id="article-title" href="" v-on:click.prevent="findArticle(article._id) "><img v-bind:src="article.img" class="img-fluid mw-50%">
+                    <div class="card-header bg-secondary" >{{article.title}}</div></a>
+                    <div class="card-body">
+                      <div class="d-flex justify-content-around" style=" margin-top: -10px; margin-bottom: 10px" >
+                        <p class="detail"><i class="far fa-user"></i> {{article.author}}</p>
+                        <p class="detail"><i class="far fa-clock"></i> {{article.postedAt.substring(0,10)}}</p>
+                      </div>
+                      <p class="card-text">{{article.content.substring(0,100)+"..."}}</p>
+                    </div>
+                    <!-- <articlecard :article="article"/> -->
+                  </div>
+                </div>
               </div>
-    
-              <div id="article-form" class="container">
-                <h2>New Article</h2>
-                <form action="">
-                  <div class="row">
-                    <div id="article-input" class="col-4">
-                      <input class="form-control input-sm mb-3" id="inputsm" type="text" placeholder="title">
-                      <input class="form-control input-sm mb-3" id="inputsm" type="text" placeholder="tag">
-                      <input class="form-control input-sm mb-3" id="inputsm" type="text" placeholder="category">
-                      <input class="form-control input-sm mb-3" id="inputsm" type="text" placeholder="description">
-                      <p>Type your story here..</p>
+              
+              <!-- new article form -->
+
+              <div v-show="articleFormSeen" id="article-form" class="container" style="margin-top:70px; margin-bottom:70px">
+                <div class="container row">
+                  <h2 class="col-4">New Article</h2>
+                </div>
+                <div class="container">
+                  <form action="">
+                    <div class="row">
+                      <div id="article-input" class="col-4">
+                        <input v-model="newArticle.title" class="form-control input-sm mb-3" type="text" placeholder="title" autocomplete="off" required>
+                        <input v-model="newArticle.img" class="form-control input-sm mb-3" type="text" placeholder="image url" autocomplete="off">
+                        <p>Type your content here..</p>
+                      </div>
                     </div>
-  
-                    <div id="article-input" class="col-4">
-                        <div class="mapouter"><div class="gmap_canvas"><iframe width="300" height="200" id="gmap_canvas" src="https://maps.google.com/maps?q=hacktiv8&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><a href="https://www.emojilib.com">emojilib.com</a></div><style>.mapouter{position:relative;text-align:right;height:200px;width:300px;}.gmap_canvas {overflow:hidden;background:none!important;height:200px;width:300px;}</style></div>
-                    </div>
+                    <wysiwyg v-model="newArticle.content"></wysiwyg>
+                    <!-- <textarea v-model="newArticle.content" id="textarea" class="form-control" name="ckeditor" rows="5"></textarea> -->
+                    <a href="" type="submit" class="btn btn-light" v-on:click.prevent="createArticle(); articlesSeen = true; articleFormSeen = false;">Submit</a>
+                    <a href="" class="btn btn-light" v-on:click.prevent="articlesSeen = true; articleFormSeen = false;">Back</a>
+                  </form>
+                  <br>
+                  <br>  
+                  <br>
+
+                </div>
+              </div>
+
+              <!-- edit article form -->
+
+              <div v-if="editFormSeen" id="article-form" class="container" style="margin-top:70px; margin-bottom:70px">
+                  <div class="container row">
+                    <h2 class="col-4">Edit Article</h2>
+                  </div>
+                  <div class="container">
+                    <form action="">
+                      <div class="row">
+                        <div id="article-input" class="col-4">
+                          <input v-model="articleData.title" class="form-control input-sm mb-3" type="text" placeholder="title" autocomplete="off" required>
+                          <input v-model="articleData.img" class="form-control input-sm mb-3" type="text" placeholder="image url" autocomplete="off">
+                          <p>Type your content here..</p>
+                        </div>
+                      </div>
+                      <wysiwyg v-model="articleData.content"></wysiwyg>
+                      <!-- <textarea v-model="newArticle.content" id="textarea" class="form-control" name="ckeditor" rows="5"></textarea> -->
+                      <a href="" type="submit" class="btn btn-light" v-on:click.prevent="updateArticle(articleData._id)">Submit</a>
+                      <a href="" class="btn btn-light" v-on:click.prevent="articlesSeen = true; editFormSeen = false;">Back</a>
+                    </form>
+                    <br>
+                    <br>  
+                    <br>
   
                   </div>
-                  <textarea id="textarea" name="ckeditor"></textarea>
-                  <button type="button" class="btn btn-light">Submit</button>
-                </form>
+                </div>
+
+              <!-- article detail -->
+
+              <div v-show="articleDetail" id="article-detail" class="container" style="margin-top:70px; margin-bottom:70px" >
+                <h1 class="offset-2">{{articleData.title}}</h1>
+                <div class="container d-flex justify-content-center">
+                  <div class="card bg-dark" style="width: 75%;">
+                    <img class="card-img-top" v-bind:src="articleData.img" alt="Card image cap">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-start">
+                        <p class="card-text mr-3"><i class="far fa-user"></i> {{articleData.author}}</p>
+                        <p class="card-text"><i class="far fa-clock"></i> {{articleData.postedAt}}</p>
+                      </div>
+                      <!-- <h5 class="card-title">{{articleData.content}}</h5> -->
+                      <h5 class="card-title" v-html="articleData.content"></h5>
+                      <div>
+                        <a v-if="articleData.author === name" href="" class="btn btn-light" v-on:click.prevent=" editFormSeen = true; articlesSeen = false; articleDetail = false">Edit Article</a>
+                        <a v-if="articleData.author === name" href="" class="btn btn-light" v-on:click.prevent=" deleteArticle(articleData._id);">Delete Article</a>
+                      </div>
+                      <a href="" class="btn btn-light" v-on:click.prevent="articlesSeen = true; articleDetail = false;">Back</a>
+                    </div>
+                  </div>
+                </div>
               </div>
               
             </div>
             
-            <div id="footer" class=" py-2 sticky-top flex-grow-1 bg-dark" style="text-align:center">
-              <h6>miniWP</h6>
-            </div>
+            <!-- footer -->
 
+            <footer class="page-footer font-small bg-dark text-center" style="width:100%">
+              <div class="footer-copyright text-center py-1">
+                <p>© 2019 Copyright: Rizky Anas Bukhori</p>
+              </div>
+            </footer>
           </div>
         </div>
       </div>
     </div>
-  
-  <script>CKEDITOR.replace( 'ckeditor' )</script>
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  </div>
+  <script>
+      
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  <script src="https://cdn.ckeditor.com/4.11.4/standard/ckeditor.js"></script>
-  <script src="./javascript/index.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="./javascript/components/article-card.js"></script>
+  <script src="./javascript/vueWysiwyg.js"></script>
+  <!-- <script src=".javascript/components/login-form.js"></script> -->
+  <script src="./javascript/vue.js"></script>
 </body>
 </html>

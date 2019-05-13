@@ -5,7 +5,8 @@
 
 body {
   background-color: #1F2226;
-  color: #F0F0F2
+  color: #F0F0F2;
+  font-family: "Ubuntu Condensed"
 }
 
 #logo {
@@ -18,7 +19,7 @@ body {
   height: 60%;
 }
 
-#sidebar a {
+#sidebar a, #article-title {
   color: #F0F0F2;
   text-decoration: none;
 }
@@ -44,6 +45,11 @@ p {
   display: flex
 }
 
+.detail {
+  display: inline;
+  font-size: 2.5vh
+}
+
 .row {
   margin-left: -9px;
   margin-right: -12px
@@ -52,4 +58,40 @@ p {
 @media screen and (max-height: 450px) {
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
+}
+
+.login-container{
+  margin-top: 5%;
+  margin-bottom: 5%;
+}
+.login-logo{
+  position: relative;
+  margin-left: -41.5%;
+}
+.login-logo img{
+  position: absolute;
+  width: 20%;
+  margin-top: 19%;
+  background: #1F2226;
+  border-radius: 4.5rem;
+  padding: 5%;
+}
+.login-form-1{
+  padding: 5%;
+  background:#1F2226;
+  box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+}
+.login-form-1 h3{
+  text-align: center;
+  margin-bottom:12%;
+  color:#fff;
+}
+.btnSubmit{
+  font-weight: 600;
+  width: 50%;
+  color: #282726;
+  background-color: #fff;
+  border: none;
+  border-radius: 1.5rem;
+  padding:2%;
 }
