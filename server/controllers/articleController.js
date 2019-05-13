@@ -4,10 +4,10 @@ const { ObjectId } = require('mongoose').Types
 
 class ArticleController {
   static create(req, res) {
-    let {title, img, content, author} = req.body
+    let {title, content, author} = req.body
     let newArticle = {
       title,
-      img,
+      img : req.file.cloudStoragePublicUrl,
       content,
       author,
       postedAt: new Date()

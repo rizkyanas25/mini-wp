@@ -1,11 +1,9 @@
 'use strict'
 require('dotenv').config()
-const fs = require('fs')
 
 const {Storage} = require('@google-cloud/storage')
 
 const CLOUD_BUCKET = process.env.CLOUD_BUCKET
-console.log(process.env.KEYFILE_PATH)
 
 const storage = new Storage({
   projectId: process.env.GCLOUD_PROJECT,
@@ -17,52 +15,34 @@ const getPublicUrl = (filename) => {
   return `https://storage.googleapis.com/${CLOUD_BUCKET}/${filename}`
 }
 
-var fileExt
-
-const saveImage = (req, res, next) => {
-    let {image, extension, name} = req.body
-
-    const base64Data = image.replace(/^data:image\/png;base64,|^data:image\/jpeg;base64,/, "");
-    const newFilename = Date.now() + extension;
-    const newFile = 'uploads/' + newFilename;
-
-    fs.writeFile(newFile, base64Data, 'base64', function(err) {
-      if (err) {
-        console.log(err);
-        res.status(500).json({
-          msg: 'Internal server error',
-        });
-      } 
-      else {
-        req.filename = newFilename
-        req.filepath = newFile
-        next()
-      }
-    });
-}
-
 const sendUploadToGCS = (req, res, next) => {
-  let gcsname = req.filepath
-  const file = bucket.file(req.filename)
+  if (!req.file) {
+    return next()
+  }
 
-  console.log('in senduploaGCS...', file);
+  const gcsname = Date.now() + req.file.originalname
+  const file = bucket.file(gcsname)
 
-  bucket.upload(req.filepath, {})
-      .then(() => {
-        // file.makePublic()
-        // .then( () => {
-          req.file = {}
-          let publicName = getPublicUrl(req.filename);
-          req.file.cloudStoragePublicUrl = publicName;
+  const stream = file.createWriteStream({
+    metadata: {
+      contentType: req.file.mimetype
+    }
+  })
 
-          console.log('done upload...', req.file.cloudStoragePublicUrl);
-          next()
-        // })
-        // .catch(err => {
-        //   console.log(err);
-        // })
-      })
+  stream.on('error', (err) => {
+    req.file.cloudStorageError = err
+    next(err)
+  })
 
+  stream.on('finish', () => {
+    req.file.cloudStorageObject = gcsname
+    file.makePublic().then(() => {
+      req.file.cloudStoragePublicUrl = getPublicUrl(gcsname)
+      next()
+    })
+  })
+
+  stream.end(req.file.buffer)
 }
 
 const Multer = require('multer'),
@@ -76,7 +56,6 @@ const Multer = require('multer'),
 
 module.exports = {
   getPublicUrl,
-  saveImage,
   sendUploadToGCS,
   multer
 }

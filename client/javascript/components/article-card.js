@@ -2,7 +2,7 @@ Vue.component('articlecard', {
   props: ['article'],
   template : `
   <div>
-    <a id="article-title" href="" v-on:click.prevent="findArticle(article._id)"><img v-bind:src="article.img" class="img-fluid mw-50%">
+    <a id="article-title" href="" v-on:click.prevent="$emit('find-article', article._id)"><img v-bind:src="article.img" class="img-fluid mw-50%">
     <div class="card-header bg-secondary" >{{article.title}}</div></a>
     <div class="card-body">
       <div class="d-flex justify-content-around" style=" margin-top: -10px; margin-bottom: 10px" >

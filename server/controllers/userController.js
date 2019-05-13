@@ -6,13 +6,13 @@ const { sign } = require('../helpers/jwt')
 
 class UserController {
   static create(req, res) {
-    let { name, email, password, profilePic } = req.body
+    let { name, email, password } = req.body
     let hashed = (password != '') ? hash(password) : password
     let newUser = {
       name, 
       email,
       password: hashed,
-      profilePic
+      profilePic : req.file.cloudStoragePublicUrl
     }
     User.create(newUser)
       .then(data => {

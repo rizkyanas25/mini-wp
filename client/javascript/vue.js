@@ -68,7 +68,7 @@ const app = new Vue({
           password : this.password
         },
         headers : {
-          token : localStorage.getItem('token')
+          token : localStorage.token
         }
       })
       .then(({ data }) => {
@@ -89,7 +89,6 @@ const app = new Vue({
             Swal.showLoading()
             timerInterval = setInterval(() => {
               Swal.getContent().querySelector('strong')
-                .textContent = Swal.getTimerLeft()
             }, 100)
           },
           onClose: () => {
@@ -138,7 +137,6 @@ const app = new Vue({
           Swal.showLoading()
           timerInterval = setInterval(() => {
             Swal.getContent().querySelector('strong')
-              .textContent = Swal.getTimerLeft()
           }, 100)
         },
         onClose: () => {
@@ -168,16 +166,26 @@ const app = new Vue({
       }) 
     },
 
+    setProfilePic() {
+      this.newUser.profilePic = this.$refs.myPic.files[0]
+      console.log(this.newUser.profilePic)
+    },
+
     register() {
+      let formData = new FormData()
+      formData.append('name', this.newUser.name)
+      formData.append('profilePic', this.newUser.profilePic)
+      formData.append('email', this.newUser.email)
+      formData.append('password', this.newUser.password)
       axios({
         method: 'post',
         url: `http://localhost:3000/register`,
-        data : this.newUser,
+        data : formData,
       })
       .then(({data}) => {
-        // console.log(data)
-        this.profilePic = this.newUser.profilePic
-        this.email = this.newUser.email
+        console.log(data)
+        this.profilePic = data.data.profilePic
+        this.email = data.data.email
         this.password = this.newUser.password
         this.login()
       })
@@ -198,6 +206,11 @@ const app = new Vue({
         this.email = ''
         this.password = ''
       }
+    },
+
+    previewFile() {
+      this.newArticle.img = this.$refs.myFile.files[0]
+      console.log(this.newArticle.img)
     },
 
     findArticle(articleId) {
@@ -227,59 +240,54 @@ const app = new Vue({
     },
 
     createArticle() {
+      let formData = new FormData()
+      formData.append('title', this.newArticle.title)
+      formData.append('img', this.newArticle.img)
+      formData.append('content', this.newArticle.content)
+      formData.append('author', this.name)
+      console.log(formData)
+
+      let timerInterval
+      Swal.fire({
+        title: 'Posting Article',
+        timer: 2500,
+        onBeforeOpen: () => {
+          Swal.showLoading()
+          timerInterval = setInterval(() => {
+            Swal.getContent().querySelector('strong')
+          }, 100)
+        },
+        onClose: () => {
+          clearInterval(timerInterval)
+        }
+      })
+
       axios({
         method: 'post',
         url: `http://localhost:3000/articles`,
-        data : {
-          title : this.newArticle.title,
-          img : this.newArticle.img,
-          content : this.newArticle.content,
-          author: this.name
-        },
+        data : formData, 
         headers : {
-          token : localStorage.getItem('token')
+          token : localStorage.token
         }
       })
       .then(({data}) => {
-        let timerInterval
-        Swal.fire({
-          title: 'Posting Article',
-          timer: 2500,
-          onBeforeOpen: () => {
-            Swal.showLoading()
-            timerInterval = setInterval(() => {
-              Swal.getContent().querySelector('strong')
-                .textContent = Swal.getTimerLeft()
-            }, 100)
-          },
-          onClose: () => {
-            clearInterval(timerInterval)
-          }
+        console.log(data)
+        this.articles.push(data)
+        this.getArticles()
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'bottom-start',
+          showConfirmButton: false,
+          timer: 3000
+        });
+        
+        Toast.fire({
+          type: 'success',
+          title: 'Article Posted'
         })
-        .then((result) => {
-          if (
-            result.dismiss === Swal.DismissReason.timer
-          ) {
-            console.log('I was closed by the timer')
-            console.log(data)
-            this.articles.push(data)
-            this.getArticles()
-            const Toast = Swal.mixin({
-              toast: true,
-              position: 'bottom-start',
-              showConfirmButton: false,
-              timer: 3000
-            });
-            
-            Toast.fire({
-              type: 'success',
-              title: 'Article Posted'
-            })
-          }
-        })
-        .catch(err => {
-          console.log(err)
-        })
+      })
+      .catch(err => {
+        console.log(err)
       })
     },
 
@@ -294,7 +302,7 @@ const app = new Vue({
           author : this.articleData.author
         },
         headers : {
-          token : localStorage.getItem('token')
+          token : localStorage.token
         }
       })
       .then(({data}) => {
@@ -306,7 +314,6 @@ const app = new Vue({
             Swal.showLoading()
             timerInterval = setInterval(() => {
               Swal.getContent().querySelector('strong')
-                .textContent = Swal.getTimerLeft()
             }, 100)
           },
           onClose: () => {
@@ -365,7 +372,7 @@ const app = new Vue({
         method: 'delete',
         url: `http://localhost:3000/articles/${articleId}`,
         headers : {
-          token : localStorage.getItem('token')
+          token : localStorage.token
         }
       })
       .then(data => {
